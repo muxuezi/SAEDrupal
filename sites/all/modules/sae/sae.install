@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * SAE Mailer installation functions.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function sae_uninstall() {
+  sae_reset_mailer();
+
+  variable_del('sae_on');
+  variable_del('sae_smtp_host');
+  variable_del('sae_smtp_hostbackup');
+  variable_del('sae_smtp_port');
+  variable_del('sae_smtp_tls');
+  variable_del('sae_smtp_username');
+  variable_del('sae_smtp_password');
+}
+
+/**
+ * Implements hook_disable().
+ */
+function sae_disable() {
+  if (sae_mailer_enabled()) {
+    sae_reset_mailer();
+    drupal_set_message(t('SAE Mail has been disabled.'));
+  }
+}
+
+/**
+ * Reset mail system to default.
+ */
+function sae_reset_mailer() {
+  // Remove SAE Mail from all mail keys it is configured for.
+  $mail_system = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
+  foreach ($mail_system as $key => $class) {
+    if ($class == 'SAEMailSystem') {
+      if ($key != 'default-system') {
+        unset($mail_system[$key]);
+      }
+      else {
+        $mail_system[$key] = 'DefaultMailSystem';
+      }
+    }
+  }
+  variable_set('mail_system', $mail_system);
+}
