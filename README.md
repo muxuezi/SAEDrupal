@@ -2,7 +2,7 @@ SAEDrupal
 =========
 Based on Drupal 7.27
 Drupal for SAE(http://sae.sina.com.cn)
- points need to be changed:
+8 points need to be changed:
     Add ./config.yaml
     Add ./sae_app_wizard.xml
     Add ./modulse/saecloud
